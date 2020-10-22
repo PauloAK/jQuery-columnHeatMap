@@ -1,14 +1,14 @@
-(function ( $ ) {
+(function($) {
     $.columnHeatmap = {
         name: 'columnHeatmap',
         version: '1.0',
         release: '2020-06-15',
         author: 'Paulo Kramer',
         site: 'https://www.paulokramer.com',
-        documentation: 'https://www.paulokramer.com/plugins/columnHeatmap#documentacao'
+        documentation: 'https://github.com/PauloAK/jQuery-columnHeatMap'
     };
 
-    $.fn.columnHeatmap = function( options ) {
+    $.fn.columnHeatmap = function(options) {
         var settings = $.extend({
             columns: [], // 0 is the first column
             contrast: true, // Change text color to white on stronger background colors
@@ -17,7 +17,7 @@
             animationSpeed: .1, // Speed of transition animation in seconds
             fn_parseValue: null, // Custom function to parse cell value
             colorStartPoint: 0 // HSL color start point
-        }, options );
+        }, options);
 
         try {
             if (!this.is('table'))
@@ -34,21 +34,21 @@
             let data = [];
 
             $.each(settings.columns, (loop, col) => {
-                rows.each( (key, row) => {
-                    if (key == 0){
+                rows.each((key, row) => {
+                    if (key == 0) {
                         data[col.toString()] = new Array;
                         data[col.toString()]['values'] = new Array;
                         data[col.toString()]['tds'] = new Array;
                     }
-                    
+
                     let td = $(row).find('td')[col];
                     data[col.toString()]['tds'].push(td);
 
 
 
-                    if (typeof settings.fn_parseValue == "function"){
+                    if (typeof settings.fn_parseValue == "function") {
                         let value = fn_parseValue($(td).text());
-                        if (typeof value == "undefined"){
+                        if (typeof value == "undefined") {
                             throw 'None value returned in fn_parseValue';
                         } else {
                             data[col.toString()]['values'].push(value);
@@ -62,19 +62,19 @@
                 });
             });
 
-            data = data.filter( (value) => { return value; } );
-        
+            data = data.filter((value) => { return value; });
+
             $.each(data, (key, col) => {
                 if (!col || !col['values'])
                     return;
-                    
+
                 data[key]['min'] = null;
                 data[key]['max'] = null;
-                    
+
                 data[key]['min'] = col['values'].reduce(function(a, b) {
                     return Math.min(a, b);
                 });
-                
+
                 data[key]['max'] = col['values'].reduce(function(a, b) {
                     return Math.max(a, b);
                 });
@@ -84,13 +84,13 @@
                 $.each(col['values'], (key, value) => {
                     let colorGenerated = colorGenerator(value, col['min'], col['max']);
 
-                    if (settings.animated){
+                    if (settings.animated) {
                         $(col['tds'][key]).css('transition', `background-color ${settings.animationSpeed}s linear, color ${settings.animationSpeed}s linear`);
                     }
-                    
+
                     $(col['tds'][key]).css('background-color', colorGenerated.color);
-                    
-                    if (colorGenerated.perc > 70 && settings.contrast){
+
+                    if (colorGenerated.perc > 70 && settings.contrast) {
                         $(col['tds'][key]).css('color', '#fff');
                     }
                 });
@@ -102,13 +102,13 @@
                 if (settings.inverse)
                     perc = 100 - perc;
 
-                var hsl = Math.abs( (perc - 100) * -1 ) + settings.colorStartPoint;
+                var hsl = Math.abs((perc - 100) * -1) + settings.colorStartPoint;
 
-                return {color: 'hsl('+ hsl +', 70%, 65%)', perc: perc};
-            } 
+                return { color: 'hsl(' + hsl + ', 70%, 65%)', perc: perc };
+            }
         } catch (error) {
             console.error(`[${$.columnHeatmap.name}::Error] ${error}`);
             return;
         }
     };
-}( jQuery ));
+}(jQuery));

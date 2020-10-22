@@ -35,7 +35,7 @@ Is possible to apply a custom parsing for each column content. By default, is ap
 
 Regex:
 ```
-/[\d|.|,]+/
+/[\d|\-|.|,]+/
 ```
 
 #### Example

@@ -55,7 +55,7 @@
                         }
                     } else {
                         // Get only numbers from the cell, (with float points)
-                        let numbers = $(td).text().match(/[\d|.|,]+/)[0];
+                        let numbers = $(td).text().match(/[\d|\-|.|,]+/)[0];
 
                         data[col.toString()]['values'].push(parseFloat(numbers));
                     }

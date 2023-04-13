@@ -47,7 +47,7 @@
 
 
                     if (typeof settings.fn_parseValue == "function") {
-                        let value = fn_parseValue($(td).text());
+                        let value = settings.fn_parseValue($(td).text());
                         if (typeof value == "undefined") {
                             throw 'None value returned in fn_parseValue';
                         } else {
